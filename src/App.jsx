@@ -86,7 +86,7 @@ function App() {
       }
     },[name])
     const saveAll = () => {
-        axios.post('http://127.0.0.1:5000/submit', {className:className, childrenData:childrenData}).then(function (res){
+        axios.post('https://server-save11.vercel.app/submit', {className:className, childrenData:childrenData}).then(function (res){
           console.log(res)
           setChildrenData([])
           alert('Сохранено!')
