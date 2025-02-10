@@ -1554,7 +1554,7 @@ function App() {
       }
     },[name])
     const saveAll = () => {
-        axios.post('http://91.77.160.1:2504/submit', {className:className, childrenData:childrenData}).then(function (res){
+        axios.post('http://91.77.160.177:2504/submit', {className:className, childrenData:childrenData}).then(function (res){
           console.log(res)
           setChildrenData([])
           alert('Сохранено!')
