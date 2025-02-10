@@ -31,7 +31,7 @@ const DataChildren = ({ name, id, onSave }) => {
         <div>
             
             <div style={{ display: 'flex' }}>
-            <div style={{width:'500px'}}>{name}</div>
+            <div style={{width:'250px'}}>{name}</div>
             <div >
                 {[d1, d2, d3, d4, d5].map((value, index) => (
                     <select
