@@ -46,7 +46,7 @@ const DataChildren = ({ name, id, onSave }) => {
                             set5(e.target.value);
                         }}
                     >
-                        <option value="" disabled>Выберите время: </option>
+                        <option value="" disabled>Время выхода: </option>
                         {timeOptions.map(time => (
                             <option key={time} value={time}>{time}</option>
                         ))}
