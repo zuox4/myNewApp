@@ -46,7 +46,7 @@ const DataChildren = ({ name, id, onSave }) => {
                             set5(e.target.value);
                         }}
                     >
-                        <option value="" disabled>Select time</option>
+                        <option value="" disabled>Выберите время: </option>
                         {timeOptions.map(time => (
                             <option key={time} value={time}>{time}</option>
                         ))}
@@ -59,7 +59,7 @@ const DataChildren = ({ name, id, onSave }) => {
 };
 
 function App() {
-    const classes = ['11Б', '11А', '11Е', '11Т', '11И', '11Э','11Г','11С'];
+    const classes = ['11Б', '11Е', '11Т', '11И', '11Э','11Г','11С'];
     const [className, setClassName] = useState('');
     const data = [
         {
@@ -1571,7 +1571,7 @@ function App() {
 
             <label>Класс:</label>
             <select className='styled-select' value={className} onChange={(e) => setClassName(e.target.value)}>
-                <option value="" disabled>Select class</option>
+                <option value="" disabled>Выберите класс: </option>
                 {classes.map(cl => <option key={cl} value={cl}>{cl}</option>)}
             </select>            <ul>
                 {data.filter(item => item.className === className)
