@@ -1,34 +1,69 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios'
-const DataChildren = ({ name, id, onSave }) => {
+const DataChildren = ({ name, id, onSave, loadData }) => {
+    const [id_l, setId] = useState(null)
     const [d1, set1] = useState('');
     const [d2, set2] = useState('');
     const [d3, set3] = useState('');
     const [d4, set4] = useState('');
     const [d5, set5] = useState('');
     const timeOptions = ['09:00', '10:30', '11:20', '12:20', '13:20', '14:20', '15:10'];
-
-    useEffect(() => {
-        const savedData = JSON.parse(localStorage.getItem(`data-${id}`));
-        if (savedData && Array.isArray(savedData)) {
-            set1(savedData[1] || '');
-            set2(savedData[2] || '');
-            set3(savedData[3] || '');
-            set4(savedData[4] || '');
-            set5(savedData[5] || '');
-        }
-    }, [id]);
-
+    const [isLoad, setLoad] = useState(false)
+    
     useEffect(() => {
         const data = [id, d1, d2, d3, d4, d5];
         onSave({ name, data });
-        localStorage.setItem(`data-${id}`, JSON.stringify(data));
+
     }, [d1, d2, d3, d4, d5, id, name]);
 
 
+    function setData(){
+        let chData = loadData.find(el=>el.ch_id===id)
+        setId(chData?chData['id']:'')
+        set1(chData?chData['t1']:'')
+        set2(chData?chData['t2']:'')
+        set3(chData?chData['t3']:'')
+        set4(chData?chData['t4']:'')
+        set5(chData?chData['t5']:'')
+        setLoad(false)
+    }
+
+
+    const saveSome = (id, t, value) => {
+        axios.put('http://91.77.160.177:2504/api/update', {id:id, column:t, new_value:value}).then(function (res){
+          console.log(res)
+
+            if(t==='t1'){
+                set1(value)
+            }
+            if(t==='t2'){
+                set2(value)
+            }
+            if(t==='t3'){
+                set3(value)
+            }
+            if(t==='t4'){
+                set4(value)
+            }
+            if(t==='t5'){
+                set5(value)
+            }
+            alert('Сохранено!')
+        }).catch(function (error){
+          console.log(error)
+        });
+        console.log('Сохраненные данные:', id, t, value);
+
+    };
+    useEffect(()=>{
+        setLoad(true)
+        setData()
+
+    }, [])
+
     return (
-        <div>
+        !isLoad&&<div>
             
             <div style={{ display: 'flex' }}>
             <div style={{width:'250px'}}>{name}</div>
@@ -38,12 +73,13 @@ const DataChildren = ({ name, id, onSave }) => {
                         key={index}
                         className='styled-select'
                         value={value}
+                        
                         onChange={(e) => {
-                            index === 0 ? set1(e.target.value) :
-                            index === 1 ? set2(e.target.value) :
-                            index === 2 ? set3(e.target.value) :
-                            index === 3 ? set4(e.target.value) :
-                            set5(e.target.value);
+                            index === 0 ? saveSome(id_l, "t1", e.target.value) :
+                            index === 1 ? saveSome(id_l, "t2", e.target.value) :
+                            index === 2 ? saveSome(id_l, "t3", e.target.value) :
+                            index === 3 ? saveSome(id_l, "t4", e.target.value) :
+                            saveSome(id_l, "t5", e.target.value);
                         }}
                     >
                         <option value="" disabled>Время выхода: </option>
@@ -59,7 +95,17 @@ const DataChildren = ({ name, id, onSave }) => {
 };
 
 function App() {
+    const [loadData, setData] = useState([])
+    const [loading, setLoading] = useState(false)
     const classes = ['11Б', '11Е', '11Т', '11И', '11Э','11Г','11С'];
+    useEffect(()=>{
+        setLoading(true)
+        axios.get('http://91.77.160.177:2504/api/data').then(res=>{
+            setData(res.data.data)
+            console.log(res.data.data)
+            setLoading(false)
+        })
+    },[])
     const [className, setClassName] = useState('');
     const data = [
         {
@@ -1567,7 +1613,7 @@ function App() {
     };
 
     return (
-        <>
+        !loading&&<>
 
             <label>Класс:</label>
             <select className='styled-select' value={className} onChange={(e) => setClassName(e.target.value)}>
@@ -1576,10 +1622,10 @@ function App() {
             </select>            <ul>
                 {data.filter(item => item.className === className)
                     .flatMap(item => item.students.map(student => (
-                        <DataChildren key={student.id} name={student.fullName} id={student.id} onSave={handleChildSave} />
+                        <DataChildren key={student.id} name={student.fullName} id={student.id} onSave={handleChildSave} loadData={loadData}/>
                     )))}
             </ul>
-            <button onClick={saveAll}>Сохранить все</button>
+            {/* <button onClick={saveAll}>Сохранить все</button> */}
         </>
     );
 }
