@@ -31,7 +31,7 @@ const DataChildren = ({ name, id, onSave, loadData }) => {
 
 
     const saveSome = (id, t, value) => {
-        axios.put('http://91.77.160.177:2504/api/update', {id:id, column:t, new_value:value}).then(function (res){
+        axios.put('http://192.168.22.8:2504/api/update', {id:id, column:t, new_value:value}).then(function (res){
           console.log(res)
 
             if(t==='t1'){
@@ -49,7 +49,7 @@ const DataChildren = ({ name, id, onSave, loadData }) => {
             if(t==='t5'){
                 set5(value)
             }
-            alert('Сохранено!')
+
         }).catch(function (error){
           console.log(error)
         });
@@ -100,7 +100,7 @@ function App() {
     const classes = ['11Б', '11Е', '11Т', '11И', '11Э','11Г','11С'];
     useEffect(()=>{
         setLoading(true)
-        axios.get('http://91.77.160.177:2504/api/data').then(res=>{
+        axios.get('http://192.168.22.8:2504/api/data').then(res=>{
             setData(res.data.data)
             console.log(res.data.data)
             setLoading(false)
@@ -1603,7 +1603,7 @@ function App() {
         axios.post('http://91.77.160.177:2504/submit', {className:className, childrenData:childrenData}).then(function (res){
           console.log(res)
           setChildrenData([])
-          alert('Сохранено!')
+
 
         }).catch(function (error){
           console.log(error)
@@ -1614,7 +1614,6 @@ function App() {
 
     return (
         !loading&&<>
-
             <label>Класс:</label>
             <select className='styled-select' value={className} onChange={(e) => setClassName(e.target.value)}>
                 <option value="" disabled>Выберите класс: </option>
